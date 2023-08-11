@@ -90,8 +90,31 @@ int set_bit(int64_t idx, BIT_ARRAY* arr) {
 	return 0;
 }
 
-void unset_bit(int64_t idx) {
+// returns either 0 or 1
+int query_bit(int64_t idx, BIT_ARRAY* arr) {
 	UNIMPL;
+}
+
+void add_to_bloom_filter(char* str, int length, BIT_ARRAY* bit_arr) {
+	int64_t p1 = hash1(str, length);
+	int64_t p2 = hash2(str, length);
+	int64_t p3 = hash3(str, length);
+	int64_t p4 = hash4(str, length);
+	int64_t p5 = hash5(str, length);
+	int64_t p6 = hash6(str, length);
+	int64_t p7 = hash7(str, length);
+	int64_t p8 = hash8(str, length);
+
+	set_bit(p1, bit_arr);
+	set_bit(p2, bit_arr);
+	set_bit(p3, bit_arr);
+	set_bit(p4, bit_arr);
+	set_bit(p5, bit_arr);
+	set_bit(p6, bit_arr);
+	set_bit(p7, bit_arr);
+	set_bit(p8, bit_arr);
+}
+void lookup_from_bloom_filter() {
 }
 
 // hash functions are originally from / inspired by:

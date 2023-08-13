@@ -44,7 +44,8 @@ typedef struct {
 
 BLOOM_FILTER *make_bloom_filter(uint64_t num_bits, uint8_t num_hashes);
 void destroy_bloom_filter(BLOOM_FILTER *filter);
-void insert_bloom_filter(BLOOM_FILTER *filter, const char *str, uint16_t length);
+void insert_bloom_filter(BLOOM_FILTER *filter, const char *str,
+                         uint16_t length);
 int query_bloom_filter(BLOOM_FILTER *filter, const char *str, uint16_t length);
 
 int64_t hash(int function, char *str, int length);

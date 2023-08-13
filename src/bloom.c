@@ -8,7 +8,7 @@
 
 BIT_ARRAY *make_bit_array(int64_t num_bits) {
   int64_t nearest_64_multiple = ((num_bits + 63) >> 6) << 6;
-  int64_t num_words =  nearest_64_multiple >> 6;
+  int64_t num_words = nearest_64_multiple >> 6;
   int64_t *words = malloc(sizeof(int64_t) * num_words);
 
   BIT_ARRAY *arr = malloc(sizeof(BIT_ARRAY));
@@ -93,14 +93,14 @@ int query_bit(BIT_ARRAY *arr, uint64_t idx) {
 }
 
 BLOOM_FILTER *make_bloom_filter(uint64_t num_bits, uint8_t num_hashes) {
-  BIT_ARRAY *arr = make_bit_array(num_bits); 
+  BIT_ARRAY *arr = make_bit_array(num_bits);
 
   BLOOM_FILTER *filter = malloc(sizeof(BLOOM_FILTER));
 
   filter->hashes = num_hashes;
   filter->bit_arr = arr;
 
-  return arr;
+  return filter;
 }
 
 void destroy_bloom_filter(BLOOM_FILTER *filter) {
@@ -108,7 +108,8 @@ void destroy_bloom_filter(BLOOM_FILTER *filter) {
   free(filter);
 }
 
-void insert_bloom_filter(BLOOM_FILTER *filter, const char *str, uint16_t length) {
+void insert_bloom_filter(BLOOM_FILTER *filter, const char *str,
+                         uint16_t length) {
   for (int i = 1; i <= filter->hashes; i++) {
     uint64_t h = hash(i, str, length);
     uint64_t idx = h % filter->bit_arr->num_bits;
@@ -129,8 +130,7 @@ int query_bloom_filter(BLOOM_FILTER *filter, const char *str, uint16_t length) {
     }
   }
 
-  
-  return 0; 
+  return 0;
 }
 
 // hash functions are originally from / inspired by:

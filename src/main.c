@@ -18,11 +18,11 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  FILE* f = fopen(argv[1], "r");
+  FILE *f = fopen(argv[1], "r");
   char line[MAXLEN];
 
   if (f != NULL) {
-    BLOOM_FILTER *filter = make_bloom_filter(640, 8);
+    BLOOM_FILTER *filter = make_bloom_filter(640, 3);
 
     while (fgets(line, MAXLEN, f) != NULL) {
       line[strcspn(line, "\r\n")] = 0;
@@ -30,7 +30,11 @@ int main(int argc, char *argv[]) {
       insert_bloom_filter(filter, line, (uint16_t)strlen(line));
     }
 
-    // print_bit_array_data(filter->bit_arr);
+    print_bit_array_data(filter->bit_arr);
+
+    printf("%d\n", query_bloom_filter(filter, "Toronto", 7));
+    printf("%d\n", query_bloom_filter(filter, "Montreal", 8));
+    printf("%d\n", query_bloom_filter(filter, "amlanta", 7));
 
     fclose(f);
     destroy_bloom_filter(filter);

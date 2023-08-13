@@ -9,7 +9,7 @@
 BIT_ARRAY *make_bit_array(int64_t num_bits) {
   int64_t nearest_64_multiple = ((num_bits + 63) >> 6) << 6;
   int64_t num_words = nearest_64_multiple >> 6;
-  int64_t *words = malloc(sizeof(int64_t) * num_words);
+  int64_t *words = calloc(num_words, sizeof(int64_t) * num_words);
 
   BIT_ARRAY *arr = malloc(sizeof(BIT_ARRAY));
   arr->words = words;
@@ -77,8 +77,11 @@ int set_bit(BIT_ARRAY *arr, uint64_t idx) {
   return 0;
 }
 
+// return 1 on found and 0 else
+// -1 if not found
 int query_bit(BIT_ARRAY *arr, uint64_t idx) {
   if (idx > arr->num_bits) {
+    assert(false && "runtime error");
     return -1;
   }
 
@@ -118,6 +121,7 @@ void insert_bloom_filter(BLOOM_FILTER *filter, const char *str,
   }
 }
 
+// returns 1 on found and zero on not found
 int query_bloom_filter(BLOOM_FILTER *filter, const char *str, uint16_t length) {
   for (int i = 1; i <= filter->hashes; i++) {
     uint64_t h = hash(i, str, length);
@@ -126,11 +130,11 @@ int query_bloom_filter(BLOOM_FILTER *filter, const char *str, uint16_t length) {
     int query = query_bit(filter->bit_arr, idx);
 
     if (!query) {
-      return 1;
+      return 0;
     }
   }
 
-  return 0;
+  return 1;
 }
 
 // hash functions are originally from / inspired by:

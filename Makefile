@@ -1,27 +1,37 @@
-INCLUDE_DIR = ./include
-SOURCE_DIR = ./src
-BUILD_DIR = ./build
+# Specify source and build directories
+SRCDIR := src
+BUILDDIR := build
+INCLDIR := include
 
-CFLAGS = -I$(INCLUDE_DIR) -g3 -Wall -Wextra -Wconversion -Wdouble-promotion \
-     -Wno-unused-parameter -Wno-unused-function -Wno-sign-conversion \
-     -fsanitize=undefined -fsanitize-trap
+# Get list of all C source files in source directory
+SOURCES := $(wildcard $(SRCDIR)/*.c) 
 
-FAST_CFLAGS = -I$(INCLUDE_DIR) -O3
+# Generate object file names from sources
+OBJECTS := $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SOURCES))
 
-SRCS = $(wildcard src/*.c)
-OBJS = $(SRCS:.c=.o)
+# Compiler and flags
+CC := clang
+CFLAGS := -c -Wall -I$(INCLDIR)
 
-main: $(OBJS)
-	mkdir -p build
-	gcc $(OBJS) -o $(BUILD_DIR)/main
+TARGET := bloom
 
-%.o: %.c
-	gcc -c $< -o $@ $(CFLAGS)
+# Target to build all object files
+.PHONY: all
+all: $(TARGET)
+	
+$(TARGET): $(OBJECTS) | $(BUILDDIR)
+	$(CC) $(OBJECTS) -o $(BUILDDIR)/$(TARGET)
 
-.PHONY: format
-format:
-	clang-format --style=LLVM -i $(SOURCE_DIR)/*.c $(INCLUDE_DIR)/*.h
+# Rule to compile C source files into object files
+$(BUILDDIR)/%.o: $(SRCDIR)/%.c | $(BUILDDIR)
+	$(CC) $(CFLAGS) -o $@ $<
 
+# Rule to create build directory
+$(BUILDDIR):
+	@mkdir -p $(BUILDDIR)
+
+# Rule to clean up build directory 
 .PHONY: clean
 clean:
-	rm -rf build
+	@rm -rf $(BUILDDIR)/*
+

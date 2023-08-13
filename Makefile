@@ -5,6 +5,7 @@ INCLDIR := include
 
 # Get list of all C source files in source directory
 SOURCES := $(wildcard $(SRCDIR)/*.c) 
+HEADERS := $(wildcard $(INCLDIR)/*.h)
 
 # Generate object file names from sources
 OBJECTS := $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SOURCES))
@@ -35,3 +36,6 @@ $(BUILDDIR):
 clean:
 	@rm -rf $(BUILDDIR)/*
 
+.PHONY: format
+format:
+	@clang-format --style=LLVM -i $(HEADERS) $(SOURCES)

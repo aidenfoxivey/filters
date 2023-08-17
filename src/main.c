@@ -22,19 +22,27 @@ int main(int argc, char *argv[]) {
   char line[MAXLEN];
 
   if (f != NULL) {
-    BLOOM_FILTER *filter = make_bloom_filter(640, 3);
+    BLOOM_FILTER *filter = make_bloom_filter(640, 2);
+
+    print_bit_array_data(filter->bit_arr);
+    printf("\n");
 
     while (fgets(line, MAXLEN, f) != NULL) {
       line[strcspn(line, "\r\n")] = 0;
 
-      insert_bloom_filter(filter, line, (uint16_t)strlen(line));
+      insert_bloom_filter(filter, line, strlen(line));
     }
 
     print_bit_array_data(filter->bit_arr);
 
+    printf("\n");
+
     printf("%d\n", query_bloom_filter(filter, "Toronto", 7));
     printf("%d\n", query_bloom_filter(filter, "Montreal", 8));
+    printf("%d\n", query_bloom_filter(filter, "eric", 4));
+    printf("%d\n", query_bloom_filter(filter, "Calgary", 7));
     printf("%d\n", query_bloom_filter(filter, "amlanta", 7));
+    printf("%d\n", query_bloom_filter(filter, "Ottawa", 6));
 
     fclose(f);
     destroy_bloom_filter(filter);

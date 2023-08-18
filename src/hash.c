@@ -152,6 +152,6 @@ unsigned int oaat(const char *str, unsigned int length) {
   return hash;
 }
 
-unsigned int hash_test_harness(unsigned int (*f)(const char *str,
-                                                 unsigned int length),
-                               unsigned int table_space) {}
+// unsigned int hash_test_harness(unsigned int (*f)(const char *str,
+                                                 //unsigned int length),
+                               //unsigned int table_space) {}

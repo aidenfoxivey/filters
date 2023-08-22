@@ -125,13 +125,24 @@ unsigned int APHash(const char *str, unsigned int length) {
   return hash;
 }
 
-unsigned int AFIHash(const char *str, unsigned int length) {
+unsigned int BadHash(const char *str, unsigned int length) {
   unsigned int hash = 0xFAF0FAF0;
   unsigned int seed = 454;
   unsigned int i = 0;
 
   for (i = 0; i < length; ++str, ++i) {
     hash &= (*str << 4) ^ (hash & seed);
+  }
+
+  return hash;
+}
+
+unsigned int BadHash2(const char *str, unsigned int length) {
+  unsigned int hash = 0xFAF0FAF0;
+  unsigned int i = 0;
+
+  for (i = 0; i < length; ++str, ++i) {
+    hash ^= (*str << 4) ^ (hash >> 2);
   }
 
   return hash;
@@ -153,5 +164,5 @@ unsigned int oaat(const char *str, unsigned int length) {
 }
 
 // unsigned int hash_test_harness(unsigned int (*f)(const char *str,
-                                                 //unsigned int length),
-                               //unsigned int table_space) {}
+// unsigned int length),
+// unsigned int table_space) {}
